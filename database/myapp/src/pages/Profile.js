@@ -22,8 +22,7 @@ function Profile({ randomUserCoin, mrkt, userProfileName, userProfileEmail }) {
           <div className="profile__top">
             <div className="profile__user">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQz7xkKmOxNZeatDKzjesmJG-s2clYi3gsncQ&usqp=CAU"
-                alt=""
+               src="https://i.pinimg.com/550x/f1/da/a7/f1daa70c9e3343cebd66ac2342d5be3f.jpg"
               />
               <h2>{userProfileName}</h2>
               <p>{userProfileEmail}</p>

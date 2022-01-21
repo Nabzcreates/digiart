@@ -24,6 +24,8 @@ const wowApi = "0xe785e82358879f061bc3dcac6f0444462d4b5330";
 function App() {
   //// user verification code starts here
   const data = [];
+  const [profileInfo, setProfileInfo] = useState([])
+
   const [userID, setUserID] = useState("");
   const [userData, setUserData] = useState({});
   const [user, setUser] = useState({});
@@ -44,7 +46,7 @@ function App() {
   useEffect(() => {
     //verify the user who signed in using "user" usestate
     auth.onAuthStateChanged((currentUser) => {
-      if (currentUser.uid) {
+      if (currentUser) {
         setUser(currentUser.uid);
 
         console.log(currentUser, "user set");
@@ -56,14 +58,18 @@ function App() {
     //onsnapshot gets data from our database
 
     onSnapshot(doc(db, "users", `${user}`), (snapshot) => {
+
       let userEmail = snapshot.data().userData[0].emailID;
-      //console.log(userEmail);
+      // console.log(userEmail);
       let userName = snapshot.data().userData[0].name;
-      let eachUserData = snapshot
-        .data()
-        .userData.map((data, id) => ({ ...data, id: id }));
+      // let eachUserData = snapshot
+      //   .data().productInfo
+      
+      //  //"" setProductInfo"
+      //   console.log(eachUserData, "this is user productINfo")
 
       console.log(userEmail, userName);
+      // setProfileInfo(eachUserData)
       setUserProfileName(userName);
       setUserProfileEmail(userEmail);
 
@@ -217,6 +223,9 @@ function App() {
             path="/marketplace"
             element={
               <Marketplace
+              profileInfo = {profileInfo}
+              setProfileInfo = {setProfileInfo}
+
                 user={user}
                 userProfileName={userProfileName}
                 setUserID={setUserID}
@@ -234,6 +243,8 @@ function App() {
             path="/profile"
             element={
               <Profile
+              profileInfo = {profileInfo}
+              setProfileInfo = {setProfileInfo}
                 userProfileName={userProfileName}
                 userProfileEmail={userProfileEmail}
                 mrkt={copyMrkt}

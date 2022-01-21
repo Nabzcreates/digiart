@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../style/LandingPage.css";
 import "../style/Card.css";
 import Navbar from "../components/Navbar";
@@ -15,8 +15,10 @@ import { Input } from "@mui/material";
 import { auth } from "../utils/firebase";
 import { signOut } from "firebase/auth";
 import FilterControl from "../components/FilterControl";
+import { getDoc, onSnapshot } from "firebase/firestore";
+
 // import { uploadBytes } from "firebase/storage";
-import { setDoc, addDoc, doc } from "firebase/firestore";
+import { setDoc, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 //import storage from "../utils/firebase";
 // #1b import db from ../utils/firebase.js
 import db from "../utils/firebase";
@@ -24,6 +26,8 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 // require("dotenv").config();
 function Marketplace({
+  profileInfo,
+  setProfileInfo,
   userProfileName,
   userID,
   setUserID,
@@ -45,7 +49,7 @@ function Marketplace({
 
   // when i type, a function should run that saves the states of the input
 
-  console.log(user, userID, "this is user and userID");
+  // console.log(user, userID, "this is user and userID");
   const handleChangeName = (e) => {
     setInputName(e.target.value);
   };
@@ -67,42 +71,61 @@ function Marketplace({
     console.log("handle file", e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (inputPrice && inputName) {
-      //handleChangeFile(inputFile);
-
-      //   const file = e.target.files[0];
-      //   const user = auth.currentUser.email;
-      //   const storage = getStorage();
-      //   const storageRef = ref(storage, user + "/" + file.name);
-      //   uploadBytes(storageRef, file).then((snapshot) => {
-      //     console.log("Uploaded a blob or file!");
-      //   });
-      // create a database of array that will take objects with values productName, productPrice: inputPrice
-      //console.log("handle file", user, storageRef);
-      setDoc(doc(db, "user", `${user}`), {
-        productInfo: [
-          {
-            productName: inputName,
-            productPrice: inputPrice,
-          },
-        ],
-      });
-    } else {
-      alert("please update all informatiom");
+  const handleSnapshot=()=>{
+    onSnapshot(doc(db, "user", `${user}`), (snapshot) => {
+     let eachUserData = snapshot.data().productInfo
+  
+      
+      setProfileInfo(eachUserData)
+    })
     }
 
-    //setdoc to new array productInfo
-    // setDoc(doc(db, "user", `${user}`), {
-    //   productInfo: [
-    //     {
-    //       productName: inputName,
-    //       productPrice: inputPrice,
-    //     },
-    //   ],
-    // });
-  };
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    //  console.log(db._authCredentials.currentUser.uid, "this is Db")
+    if (inputPrice && inputName) {
+      let docRef = doc(db, "user", `${user}`);
+      let docSnap = await getDoc(docRef);
+      if(!docSnap.exists())
+      {
+        await setDoc(doc(db, "user", `${user}`), {
+        productInfo: [
+              {
+                productName: inputName,
+                productPrice: inputPrice,
+              },
+            ], 
+        
+      },)
+
+    }
+      await updateDoc(doc(db, "user", `${user}`), {
+        productInfo: arrayUnion({
+          productName: inputName,
+          productPrice: inputPrice,
+        })
+      })
+      setProfileInfo([])
+      handleSnapshot()
+      
+    }
+  
+     else {
+      alert("please update all informatiom");
+    }
+    
+  }
+  console.log('afta and outside evrythng: ', profileInfo)
+   
+
+      
+  useEffect(()=>{
+    handleSnapshot()
+}
+,[user])
+// console.log(profileInfo, "this is profile info")
+
+
 
   const logout = async () => {
     await signOut(auth);

@@ -20,13 +20,13 @@ import { getAuth } from "firebase/auth";
 // };
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDhYJAPsD7tVujtLmMIlHakXVdNkWyc4_Y",
-    authDomain: "capstone-e452d.firebaseapp.com",
-    projectId: "capstone-e452d",
-    storageBucket: "capstone-e452d.appspot.com",
-    messagingSenderId: "266376065424",
-    appId: "1:266376065424:web:6b16e8c4a856431d7d8315",
-    measurementId: "G-BRS5MKJLWX",
+    apiKey: "AIzaSyBwyvQiQNVZ6WcRceI_HlqphsWBft4j2lo",
+  authDomain: "digiart-a90b0.firebaseapp.com",
+  projectId: "digiart-a90b0",
+  storageBucket: "digiart-a90b0.appspot.com",
+  messagingSenderId: "340517510636",
+  appId: "1:340517510636:web:1a561e0302f6e218b3b4c9",
+  measurementId: "G-07XH1Y1MLH"
 };
 
 // Initialize Firebase
