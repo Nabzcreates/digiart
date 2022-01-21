@@ -44,7 +44,7 @@ function App() {
   useEffect(() => {
     //verify the user who signed in using "user" usestate
     auth.onAuthStateChanged((currentUser) => {
-      if (currentUser.uid) {
+      if (currentUser) {
         setUser(currentUser.uid);
 
         console.log(currentUser, "user set");
