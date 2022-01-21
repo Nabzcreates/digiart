@@ -59,17 +59,19 @@ function Marketplace({
   };
 
   const handleChangeFile = (e) => {
-    const file = e.target.files[0];
-    const user = auth.currentUser.email;
-    const storage = getStorage();
-    const storageRef = ref(storage, user + "/" + file.name);
-    setInputFile(
-      uploadBytes(storageRef, file).then((snapshot) => {
-        console.log("Uploaded a blob or file!");
-      })
-    );
-    console.log("handle file", e.target.value);
-  };
+    setInputFile(e.target.value);
+  }
+    // const file = e.target.files[0];
+    // const user = auth.currentUser.email;
+    // const storage = getStorage();
+    // const storageRef = ref(storage, user + "/" + file.name);
+    // setInputFile(
+    //   uploadBytes(storageRef, file).then((snapshot) => {
+    //     console.log("Uploaded a blob or file!");
+    //   })
+    // );
+    // console.log("handle file", e.target.value);
+  
 
   const handleSnapshot=()=>{
     onSnapshot(doc(db, "user", `${user}`), (snapshot) => {
@@ -93,6 +95,7 @@ function Marketplace({
               {
                 productName: inputName,
                 productPrice: inputPrice,
+                productImage: inputFile
               },
             ], 
         
@@ -103,6 +106,7 @@ function Marketplace({
         productInfo: arrayUnion({
           productName: inputName,
           productPrice: inputPrice,
+          productImage: inputFile
         })
       })
       setProfileInfo([])
@@ -203,10 +207,15 @@ function Marketplace({
                   variant="standard"
                   onChange={handleChangePrice}
                 />
-                <Input
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Enter image link"
+                  type="text"
+                  fullWidth
+                  variant="standard"
                   onChange={handleChangeFile}
-                  type="file"
-                  accept="image/*"
                 />
               </DialogContent>
               <DialogActions>
