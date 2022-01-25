@@ -1,5 +1,4 @@
 .profile {
-  height: 100%;
   padding-top: 28px;
   display: flex;
   justify-content: space-evenly;
@@ -34,6 +33,7 @@ button:hover {
   width: 100%;
   display: grid;
   place-items: center;
+  padding-bottom: 30px;
 }
 
 h2 {
@@ -125,11 +125,11 @@ h2 {
 
 @media (max-width: 786px) {
   .profile__top {
-    display: flex;
-    flex-direction: column;
+      display: flex;
+      flex-direction: column;
   }
 
   .profile__itemDesc {
-    margin-top: 40px;
+      margin-top: 40px;
   }
 }

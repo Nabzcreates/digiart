@@ -3,16 +3,23 @@ import "../style/NftCard.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Popper from "@mui/material/Popper";
+import { doc, setDoc } from "firebase/firestore";
+import db from "../utils/firebase";
 
-function NftCard({ img, ID }) {
+function NftCard({ img, price, name, ID, profileInfo, user }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const handleDelete = () => {
-    console.log("Delete item in database");
+  const handleDelete = (ID) => {
+    let arr = [...profileInfo];
+    const deletedArr = arr.filter((nft) => nft.id !== ID);
+    setDoc(doc(db, "user", `${user}`), {
+      productInfo: deletedArr,
+    });
+
     setAnchorEl(null);
   };
 
@@ -21,7 +28,14 @@ function NftCard({ img, ID }) {
 
   return (
     <>
-      <div style={{ height: "35px", display: "flex", justifyContent: "end" }}>
+      <div
+        style={{
+          height: "35px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <span>{ID}</span>
         <button
           style={{ background: "none" }}
           aria-describedby={id}
@@ -49,7 +63,7 @@ function NftCard({ img, ID }) {
         >
           Are you sure you want to DELETE? ID: {ID}
           <div className="nftCard__btns">
-            <button onClick={handleDelete}>DELETE</button>
+            <button onClick={() => handleDelete(ID)}>DELETE</button>
             <button onClick={() => setAnchorEl(null)}>CANCEL</button>
           </div>
         </Box>
@@ -57,7 +71,8 @@ function NftCard({ img, ID }) {
 
       <img src={img} alt="Nft card display" />
       <div className="nftCard__details">
-        <p>ID: {ID}</p>
+        <p>{name}</p>
+        <p>Price: {price}</p>
       </div>
     </>
   );

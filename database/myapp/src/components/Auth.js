@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import db, { auth } from "../utils/firebase";
 import {
   userID,
@@ -13,12 +14,14 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import GoogleIcon from "@mui/icons-material/Google";
 import "../style/login.css";
 
-function Auth({ userID, setUserID, loginRedboxClass }) {
+function Auth({ setUserProfileEmail,setUserProfileName, userID, setUserID, loginRedboxClass }) {
   const emailRef = useRef();
   const passwordRef = useRef();
   const NameInput = useRef();
   const loginEmailRef = useRef();
   const loginPasswordRef = useRef();
+
+  const navigate = useNavigate();
 
   const googleFunction = async (e) => {
     e.preventDefault();
@@ -28,7 +31,10 @@ function Auth({ userID, setUserID, loginRedboxClass }) {
       signInWithPopup(auth, provider).then(async (result) => {
         const user = result.user;
         const username = user.displayName;
-        // console.log(username)
+        const userGoogleEmail = user.email;
+        console.log(user.email)
+        setUserProfileName(username);
+  setUserProfileEmail(userGoogleEmail);
         // console.log(user.email
         await setDoc(doc(db, "users", `${user.uid}`), {
           userData: {
@@ -37,7 +43,8 @@ function Auth({ userID, setUserID, loginRedboxClass }) {
           },
         });
         if (user) {
-          window.location = "/marketplace";
+          // window.location = "/marketplace";
+          navigate("/marketplace");
         }
       });
     } catch (error) {
@@ -55,7 +62,8 @@ function Auth({ userID, setUserID, loginRedboxClass }) {
       ).then((user) => {
         // console.log("user logged in");
         if (user) {
-          window.location = "/marketplace";
+          // window.location = "/marketplace";
+          navigate("/marketplace");
         }
       });
     } catch (error) {
@@ -83,7 +91,8 @@ function Auth({ userID, setUserID, loginRedboxClass }) {
           ],
         });
         if (cred) {
-          window.location = "/marketplace";
+          // window.location = "/marketplace";
+          navigate("/marketplace");
         }
       });
     } catch (error) {

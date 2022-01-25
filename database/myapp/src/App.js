@@ -14,6 +14,7 @@ import Auth from "./components/Auth";
 import db, { auth } from "./utils/firebase";
 import { onSnapshot, doc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import Footer from "./components/Footer";
 
 const deadFellazApi = "0x2acab3dea77832c09420663b0e1cb386031ba17b";
 const pudgyPenguinsApi = "0xBd3531dA5CF5857e7CfAA92426877b022e612cf8";
@@ -24,14 +25,13 @@ const wowApi = "0xe785e82358879f061bc3dcac6f0444462d4b5330";
 function App() {
   //// user verification code starts here
   const data = [];
-  const [profileInfo, setProfileInfo] = useState([])
-
   const [userID, setUserID] = useState("");
   const [userData, setUserData] = useState({});
   const [user, setUser] = useState({});
   const [userProfile, setUserProfile] = useState(userData);
   const [userProfileName, setUserProfileName] = useState("");
   const [userProfileEmail, setUserProfileEmail] = useState("");
+  const [profileInfo, setProfileInfo] = useState([]);
 
   let [randomUserCoin, setRandomUserCoin] = useState(null);
   useEffect(() => {
@@ -46,10 +46,10 @@ function App() {
   useEffect(() => {
     //verify the user who signed in using "user" usestate
     auth.onAuthStateChanged((currentUser) => {
-      if (currentUser) {
+      if (currentUser.uid) {
         setUser(currentUser.uid);
 
-        console.log(currentUser, "user set");
+        // console.log(currentUser, "user set");
       } else {
         console.log("please sign in");
         //do something that user cant see the marketplace without signing in
@@ -58,30 +58,26 @@ function App() {
     //onsnapshot gets data from our database
 
     onSnapshot(doc(db, "users", `${user}`), (snapshot) => {
-
       let userEmail = snapshot.data().userData[0].emailID;
-      // console.log(userEmail);
+      //console.log(userEmail);
       let userName = snapshot.data().userData[0].name;
-      // let eachUserData = snapshot
-      //   .data().productInfo
-      
-      //  //"" setProductInfo"
-      //   console.log(eachUserData, "this is user productINfo")
+      let eachUserData = snapshot
+        .data()
+        .userData.map((data, id) => ({ ...data, id: id }));
 
-      console.log(userEmail, userName);
-      // setProfileInfo(eachUserData)
-      setUserProfileName(userName);
-      setUserProfileEmail(userEmail);
+      console.log(userEmail, userName, "this is it");
+      // setUserProfileName(userName);
+      // setUserProfileEmail(userEmail);
 
       //add a condition
       // what do u need this data to do?
       //dasetProfile(eachUserData) ta with users uploads if any
 
-      console.log(
-        "userprofile has been set",
-        userProfileName,
-        userProfileEmail
-      );
+      // console.log(
+      //   "userprofile has been set",
+      //   userProfileName,
+      //   userProfileEmail
+      // );
     });
   }, [user]);
   //// user verification code ends here
@@ -100,6 +96,44 @@ function App() {
       "X-API-KEY": REACT_APP_API_KEY,
     },
   };
+
+  // console.log(mrkt);
+  // 7. useEffefct that has a handleFilter() function
+  useEffect(() => {
+    // 7a. handle function should have an if statement that depending on the filterMarket it will setFilterMarketTasks() with the filtered tasks
+    // 7a. handle function should have an if statement that depending on the filterMarket it will setFilterMarketTasks() with the filtered tasks
+    const handleFilter = () => {
+      if (filterMarket === "Mutant Ape Yacht Club") {
+        return setFilteredMrkt(
+          copyMrkt.filter(
+            (nft) => nft.collection.name === "Mutant Ape Yacht Club"
+          )
+        );
+      } else if (filterMarket === "DeadFellaz") {
+        return setFilteredMrkt(
+          copyMrkt.filter((nft) => nft.collection.name === "DeadFellaz")
+        );
+      } else if (filterMarket === "Pudgy Penguins") {
+        return setFilteredMrkt(
+          copyMrkt.filter((nft) => nft.collection.name === "Pudgy Penguins")
+        );
+      } else if (filterMarket === "World of Women") {
+        return setFilteredMrkt(
+          copyMrkt.filter((nft) => nft.collection.name === "World of Women")
+        );
+      } else if (filterMarket === "Bored Ape Kennel Club") {
+        return setFilteredMrkt(
+          copyMrkt.filter(
+            (nft) => nft.collection.name === "Bored Ape Kennel Club"
+          )
+        );
+      } else {
+        // if the status is all setFilteredMrkt to mrkt
+        return setFilteredMrkt(copyMrkt);
+      }
+    };
+    handleFilter();
+  }, [filterMarket, mrkt]);
   // console.log(mrkt);
   // 7. useEffefct that has a handleFilter() function
   useEffect(() => {
@@ -181,14 +215,14 @@ function App() {
   featured.assets &&
     featured.assets.map((nft) => {
       let newKey = Object.assign({}, nft);
-      newKey.price = `0.${randomNum()} ETH`;
+      newKey.price = `0.${randomNum()}`;
       newKey.category = "crypto punk";
       return copyFeatured.push(newKey);
     });
   mrkt &&
     mrkt.map((nft) => {
       let newKey = Object.assign({}, nft);
-      newKey.price = `0.${randomNum()} ETH`;
+      newKey.price = `0.${randomNum()}`;
       return copyMrkt.push(newKey);
     });
   function shuffle(array) {
@@ -223,9 +257,6 @@ function App() {
             path="/marketplace"
             element={
               <Marketplace
-              profileInfo = {profileInfo}
-              setProfileInfo = {setProfileInfo}
-
                 user={user}
                 userProfileName={userProfileName}
                 setUserID={setUserID}
@@ -235,6 +266,8 @@ function App() {
                 filterMarket={filterMarket}
                 setFilterMarket={setFilterMarket}
                 filteredMrkt={filteredMrkt}
+                profileInfo={profileInfo}
+                setProfileInfo={setProfileInfo}
               />
             }
           />
@@ -243,11 +276,10 @@ function App() {
             path="/profile"
             element={
               <Profile
-              profileInfo = {profileInfo}
-              setProfileInfo = {setProfileInfo}
+                user={user}
                 userProfileName={userProfileName}
                 userProfileEmail={userProfileEmail}
-                mrkt={copyMrkt}
+                profileInfo={profileInfo}
                 randomUserCoin={randomUserCoin}
               />
             }
@@ -260,10 +292,14 @@ function App() {
           <Route
             exact
             path="/login"
-            element={<Auth setUserID={setUserID} userID={userID} />}
+            element={<Auth 
+              setUserProfileEmail={setUserProfileEmail}
+              setUserProfileName= {setUserProfileName}
+              setUserID={setUserID} userID={userID} />}
           />
           <Route exact path="/upload" element={<UploadForm />} />
         </Routes>
+        <Footer />
       </div>
     </BrowserRouter>
   );

@@ -38,11 +38,21 @@ const style = {
   pb: 3,
 };
 
-function Card({ name, img, description, price, key, id }) {
+function Card({
+  name,
+  img,
+  description,
+  price,
+  key,
+  id,
+  nftSymbol,
+  openSeaLink,
+}) {
   const [{ basket }, dispatch] = useStateValue();
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
+  // console.log(openSeaLink);
   const addToBasket = () => {
     dispatch({
       type: "ADD_TO_BASKET",
@@ -89,7 +99,6 @@ function Card({ name, img, description, price, key, id }) {
         <Box sx={style}>
           <div
             style={{
-              width: "480px",
               display: "grid",
               placeItems: "center",
             }}
@@ -99,6 +108,8 @@ function Card({ name, img, description, price, key, id }) {
               img={img}
               description={description}
               price={price}
+              nftSymbol={nftSymbol}
+              openSeaLink={openSeaLink}
             />
           </div>
         </Box>
