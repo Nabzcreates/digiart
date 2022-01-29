@@ -4,20 +4,20 @@
     padding: 30px 20px;
     justify-content: center;
     align-items: center;
-}
-.categories {
+  }
+  .categories {
     color: black;
     font-weight: 800;
     font-size: 16px;
-}
-.items-statuses {
+  }
+  .items-statuses {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
     flex-wrap: wrap;
-}
-.items-statuses span {
+  }
+  .items-statuses span {
     border-radius: 10px/20px;
     background-color: rgba(58, 123, 253, 0.2);
     color: #fff;
@@ -27,14 +27,15 @@
     cursor: pointer;
     transition: all 500ms ease-in-out;
     border: 2px solid hsl(220, 98%, 61%);
-}
-.items-statuses span:hover {
+  }
+  .items-statuses span:hover {
     background-color: hsl(220, 98%, 61%);
     color: #fff;
-}
-.addItem {
+  }
+  .addItem,
+  .generate-nft {
     height: 30px;
-    width: 100px;
+    width: 140px;
     background-color: rgba(58, 123, 253, 0.2);
     border: 2px solid hsl(220, 98%, 61%);
     color: #fff;
@@ -47,14 +48,16 @@
     color: black;
     font-weight: 800;
     font-size: 20px;
-}
-
-.mrkt-title {
+  }
+  .generate-nft {
+    margin-right: 10px;
+  }
+  .mrkt-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.title {
+  }
+  .title {
     width: 200px;
     font-size: 20px;
     color: white;
@@ -62,7 +65,17 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-}
-.items-statuses .active {
+  }
+  .items-statuses .active {
     background-color: hsl(220, 98%, 61%);
-}
+  }
+  .button-container {
+    display: flex;
+  }
+  
+  @media (max-width: 786px) {
+    .button-container {
+      display: flex;
+      flex-direction: column;
+    }
+  }

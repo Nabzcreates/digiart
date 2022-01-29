@@ -11,7 +11,7 @@ import { useStateValue } from "../StateProvider";
 import { auth } from "../utils/firebase";
 import { signOut } from "firebase/auth";
 
-function Navbar() {
+function Navbar({ randomUserCoin, user }) {
     const [{ basket }] = useStateValue();
     const [isActive, setActive] = useState("false");
     const [state, setState] = useState({
@@ -21,7 +21,7 @@ function Navbar() {
         right: false,
     });
     const [filterNav, setFilterNav] = useState("all");
-    // const [filteredNav, setFilteredNav] = useState(mrkt);
+
     const handleToggle = () => {
         setActive(!isActive);
     };
@@ -51,23 +51,20 @@ function Navbar() {
             <div className="navbar__drawer">
                 <div className="navbar__drawerTop">
                     <div>Account</div>
-                    <p>ID: 45235</p>
+                    <h6>@{user}</h6>
                 </div>
-                <div className="navbar__drawerBottom">
-                    <div className="navbar__eth">
-                        <img
-                            src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
-                            alt="ethereum logo"
-                        />
-                    </div>
-                    <p className="eth__number">Eth: {0.3}</p>
-                    <p className="eth__username">@user</p>
+                <div className="navbar__eth">
+                    <img
+                        className="wave"
+                        src="https://cryptologos.cc/logos/ethereum-eth-logo.png"
+                        alt="ethereum logo"
+                    />
                 </div>
+                <p className="eth__number">ETH: {randomUserCoin}</p>
             </div>
         </Box>
     );
     const handleActive = (e) => {
-        console.log(e);
         setFilterNav(e);
     };
     return (
@@ -96,7 +93,7 @@ function Navbar() {
                     onClick={() => handleActive("cart")}
                 >
                     <Link to="/cart">
-                        <ShoppingCartIcon />
+                        <ShoppingCartIcon className="wave" />
                         {basket?.length}
                     </Link>
                 </li>
@@ -135,8 +132,9 @@ function Navbar() {
                                     <Drawer
                                         PaperProps={{
                                             style: {
-                                                height: "30vh",
-                                                borderRadius: "10px 0 0 10px",
+                                                height: "50vh",
+                                                borderRadius: "20px 0 0 20px",
+                                                backgroundColor: "#141418",
                                                 marginTop: "60px",
                                             },
                                         }}
@@ -165,5 +163,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-// logoutbtn ={<button onClick={logout}>LOGOUT</button>}

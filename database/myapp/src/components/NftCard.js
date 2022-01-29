@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../style/NftCard.css";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Popper from "@mui/material/Popper";
@@ -7,11 +6,10 @@ import { doc, setDoc } from "firebase/firestore";
 import db from "../utils/firebase";
 
 function NftCard({ img, price, name, ID, profileInfo, user }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
 
   const handleDelete = (ID) => {
     let arr = [...profileInfo];
@@ -19,28 +17,18 @@ function NftCard({ img, price, name, ID, profileInfo, user }) {
     setDoc(doc(db, "user", `${user}`), {
       productInfo: deletedArr,
     });
-
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
-
   return (
     <>
-      <div
-        style={{
-          height: "35px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+      <div className="nft-id-delete">
         <span>{ID}</span>
         <button
           style={{ background: "none" }}
           aria-describedby={id}
           type="button"
-          onClick={handleClick}
+          onClick={(e) => setAnchorEl(anchorEl ? null : e.currentTarget)}
         >
           <DeleteIcon className="nftCard__delete" />
         </button>
@@ -58,6 +46,7 @@ function NftCard({ img, price, name, ID, profileInfo, user }) {
             position: "absolute",
             top: "0",
             left: "0",
+            border: "3px solid hsl(220, 98%, 61%)",
           }}
           sx={{ border: 1, p: 1, bgcolor: "background.paper" }}
         >
@@ -68,11 +57,12 @@ function NftCard({ img, price, name, ID, profileInfo, user }) {
           </div>
         </Box>
       </Popper>
-
-      <img src={img} alt="Nft card display" />
-      <div className="nftCard__details">
-        <p>{name}</p>
-        <p>Price: {price}</p>
+      <div className="topImg">
+        <img src={img} alt="" />
+      </div>
+      <div className="description">
+        <p className="card-name">{name}</p>
+        <h6 className="price profile-price">Price: {price}</h6>
       </div>
     </>
   );
